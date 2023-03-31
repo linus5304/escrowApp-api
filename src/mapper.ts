@@ -34,23 +34,22 @@ export function fromPrismaTransactionToTransactionDto(
   };
 }
 
-export function fromUserDtoToPrismaUser(
-  data: UserDto,
-): Omit<Omit<User, 'password'>, 'rtHash'> {
+export function fromPrismaUserToUserDto(
+  data: User,
+): Omit<Omit<UserDto, 'password'>, 'rtHash'> {
   return {
     id: data.id,
     email: data.email,
-    createdAt: new Date(data.createdAt),
-    updatedAt: new Date(data.updatedAt),
   };
 }
 
-export function fromPrismaUserToUserDto(source: User): UserDto {
+export function fromUserDtoToPrismaUser(source: UserDto): User {
   return {
     id: source.id,
     email: source.email,
     password: source.password,
-    createdAt: source.createdAt.toISOString(),
-    updatedAt: source.updatedAt.toISOString(),
+    rtHash: '',
+    createdAt: new Date(),
+    updatedAt: new Date(),
   };
 }

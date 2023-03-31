@@ -33,10 +33,6 @@ export class AuthService {
     return null;
   }
 
-  async me(id: string): Promise<User> {
-    return this.usersService.findById(id);
-  }
-
   async register(data: AuthDto): Promise<Tokens> {
     const saltOrRounds = 10;
     const hashedPassword = await bcrypt.hash(data.password, saltOrRounds);

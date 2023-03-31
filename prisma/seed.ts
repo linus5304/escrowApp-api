@@ -4,6 +4,10 @@ import * as bcrypt from 'bcrypt';
 const prisma = new PrismaClient();
 
 async function main() {
+  // Delete all records
+
+  // prisma.user.deleteMany({});
+  // prisma.transaction.deleteMany({});
   // Seed Users
   const users = [
     {
@@ -36,29 +40,94 @@ async function main() {
   );
 
   // Seed Transactions
-  const transactions = [
+  const transactionsData = [
     {
       buyerId: createdUsers[0].id,
-      sellerId: createdUsers[2].id,
-      escrowAgentId: createdUsers[4].id,
-      amount: 1000,
+      sellerId: createdUsers[1].id,
+      escrowAgentId: createdUsers[2].id,
+      amount: 1500,
       currency: 'USD',
-      status: 'PENDING',
+      status: 'completed',
+    },
+    {
+      buyerId: createdUsers[3].id,
+      sellerId: createdUsers[4].id,
+      escrowAgentId: createdUsers[2].id,
+      amount: 3500,
+      currency: 'USD',
+      status: 'in_progress',
+    },
+    {
+      buyerId: createdUsers[4].id,
+      sellerId: createdUsers[1].id,
+      escrowAgentId: createdUsers[2].id,
+      amount: 750,
+      currency: 'USD',
+      status: 'completed',
+    },
+    {
+      buyerId: createdUsers[0].id,
+      sellerId: createdUsers[3].id,
+      escrowAgentId: createdUsers[2].id,
+      amount: 1200,
+      currency: 'USD',
+      status: 'in_progress',
     },
     {
       buyerId: createdUsers[1].id,
-      sellerId: createdUsers[3].id,
-      escrowAgentId: createdUsers[4].id,
-      amount: 500,
+      sellerId: createdUsers[0].id,
+      escrowAgentId: createdUsers[2].id,
+      amount: 900,
       currency: 'USD',
-      status: 'COMPLETED',
+      status: 'completed',
     },
-    // Add more transactions here
+    {
+      buyerId: createdUsers[4].id,
+      sellerId: createdUsers[2].id,
+      escrowAgentId: createdUsers[3].id,
+      amount: 1100,
+      currency: 'USD',
+      status: 'pending',
+    },
+    {
+      buyerId: createdUsers[2].id,
+      sellerId: createdUsers[3].id,
+      escrowAgentId: createdUsers[1].id,
+      amount: 2500,
+      currency: 'USD',
+      status: 'completed',
+    },
+    {
+      buyerId: createdUsers[3].id,
+      sellerId: createdUsers[1].id,
+      escrowAgentId: createdUsers[4].id,
+      amount: 1800,
+      currency: 'USD',
+      status: 'completed',
+    },
+    {
+      buyerId: createdUsers[1].id,
+      sellerId: createdUsers[4].id,
+      escrowAgentId: createdUsers[0].id,
+      amount: 4500,
+      currency: 'USD',
+      status: 'in_progress',
+    },
+    {
+      buyerId: createdUsers[2].id,
+      sellerId: createdUsers[0].id,
+      escrowAgentId: createdUsers[1].id,
+      amount: 550,
+      currency: 'USD',
+      status: 'pending',
+    },
   ];
 
-  for (const transactionData of transactions) {
-    await prisma.transaction.create({ data: transactionData });
-  }
+  const createdTransactions = await Promise.all(
+    transactionsData.map((transaction) =>
+      prisma.transaction.create({ data: transaction }),
+    ),
+  );
 }
 
 main()

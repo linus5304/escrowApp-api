@@ -21,11 +21,6 @@ import { Public } from './scope.decorator';
 export class AuthController {
   constructor(private authService: AuthService) {}
 
-  @Get('me')
-  me(@Req() req: UserRequest): Promise<Omit<User, 'password'>> {
-    return this.authService.me(req.user.id);
-  }
-
   @Public()
   @Post('register')
   register(@Body() data: AuthDto) {

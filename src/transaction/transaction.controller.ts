@@ -1,4 +1,5 @@
 import { Controller, Get, Post } from '@nestjs/common';
+import { Public } from '../auth/scope.decorator';
 import {
   fromPrismaTransactionToTransactionDto,
   fromTransactionDtoToPrismaTransaction,
@@ -45,6 +46,7 @@ export class TransactionController {
   }
 
   @Get()
+  @Public()
   async getAllTransactions(): Promise<TransactionDto[]> {
     return (await this.transactionService.getAllTransactions()).map(
       fromPrismaTransactionToTransactionDto,
