@@ -6,9 +6,13 @@ import {
   HttpStatus,
   Get,
   Req,
+  UseGuards,
 } from '@nestjs/common';
+import { AuthGuard } from '@nestjs/passport';
 import { User } from '@prisma/client';
+import { Request } from 'express';
 import { UserDto } from '../users/users.dto';
+import { Tokens } from '../utils/types';
 import { UserRequest } from './auth.interface';
 import { AuthService } from './auth.service';
 import { Public } from './scope.decorator';
@@ -17,7 +21,6 @@ import { Public } from './scope.decorator';
 export class AuthController {
   constructor(private authService: AuthService) {}
 
-  @Public()
   @Get('me')
   me(@Req() req: UserRequest): Promise<Omit<User, 'password'>> {
     return this.authService.me(req.user.id);
@@ -32,6 +35,21 @@ export class AuthController {
   @Public()
   @Post('login')
   signIn(@Body() data: UserDto) {
-    return this.authService.signIn(data.email, data.password);
+    return this.authService.login(data.email, data.password);
+  }
+
+  @Post('logout')
+  @HttpCode(HttpStatus.NO_CONTENT)
+  async signOut(@Req() req: Request): Promise<void> {
+    const user = req.user;
+    this.authService.logout(user['id']);
+  }
+
+  @UseGuards(AuthGuard('jwt-refresh'))
+  @Post('refresh')
+  @HttpCode(HttpStatus.OK)
+  async refresh(@Req() req: Request): Promise<Tokens> {
+    const user = req.user;
+    return this.authService.refreshTokens(user['id'], user['refreshToken']);
   }
 }

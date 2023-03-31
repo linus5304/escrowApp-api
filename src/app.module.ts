@@ -9,6 +9,7 @@ import { JwtModule } from '@nestjs/jwt';
 import { jwtConstants } from './auth/constants';
 import { APP_GUARD } from '@nestjs/core';
 import { AuthGuard } from './auth/auth.gaurd';
+import { LocalStrategy } from './auth/local.auth';
 
 @Module({
   imports: [
@@ -17,7 +18,7 @@ import { AuthGuard } from './auth/auth.gaurd';
     UsersModule,
     JwtModule.register({
       global: true,
-      secret: jwtConstants.secret,
+      secret: jwtConstants.at_secret,
       signOptions: { expiresIn: '60s' },
     }),
     PrismaModule,

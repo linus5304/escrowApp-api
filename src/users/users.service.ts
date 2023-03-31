@@ -3,8 +3,6 @@ import { User } from '@prisma/client';
 import { PrismaService } from '../prisma/prisma.service';
 import { UserDto } from './users.dto';
 
-// This should be a real class/interface representing a user entity
-
 @Injectable()
 export class UsersService {
   constructor(private prisma: PrismaService) {}
@@ -18,11 +16,18 @@ export class UsersService {
     }
   }
 
-  async findById(id: string): Promise<User> {
+  async findById(id: string): Promise<User | null> {
     return this.prisma.user.findUnique({ where: { id } });
   }
 
   async findOne(email: string): Promise<User> {
     return this.prisma.user.findUnique({ where: { email } });
+  }
+
+  async updateUser(id: string, data: Partial<User>): Promise<User> {
+    return this.prisma.user.update({
+      where: { id },
+      data,
+    });
   }
 }
