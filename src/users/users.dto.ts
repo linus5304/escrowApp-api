@@ -27,11 +27,15 @@ export class UserDto {
 
   @IsNotEmpty()
   @IsEmail()
+  password: string;
+
+  @IsNotEmpty()
+  @IsEmail()
   email: string;
 
   @IsString()
-  createdAt: string;
+  createdAt?: string;
 
   @IsString()
-  updatedAt: string;
+  updatedAt?: string;
 }

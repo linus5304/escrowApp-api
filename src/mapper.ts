@@ -49,6 +49,7 @@ export function fromPrismaUserToUserDto(source: User): UserDto {
   return {
     id: source.id,
     email: source.email,
+    password: source.password,
     createdAt: source.createdAt.toISOString(),
     updatedAt: source.updatedAt.toISOString(),
   };

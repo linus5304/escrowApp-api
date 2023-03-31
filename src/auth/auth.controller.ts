@@ -11,7 +11,7 @@ import {
 import { AuthGuard } from '@nestjs/passport';
 import { User } from '@prisma/client';
 import { Request } from 'express';
-import { UserDto } from '../users/users.dto';
+import { AuthDto, UserDto } from '../users/users.dto';
 import { Tokens } from '../utils/types';
 import { UserRequest } from './auth.interface';
 import { AuthService } from './auth.service';
@@ -28,8 +28,8 @@ export class AuthController {
 
   @Public()
   @Post('register')
-  register(@Body() data: UserDto) {
-    return this.authService.register(data.email, data.password);
+  register(@Body() data: AuthDto) {
+    return this.authService.register({ ...data });
   }
 
   @Public()

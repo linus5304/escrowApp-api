@@ -10,6 +10,7 @@ import * as bcrypt from 'bcrypt';
 import { jwtConstants } from './constants';
 import { Tokens } from '../utils/types';
 import { PrismaService } from '../prisma/prisma.service';
+import { AuthDto, UserDto } from '../users/users.dto';
 
 @Injectable()
 export class AuthService {
@@ -36,11 +37,11 @@ export class AuthService {
     return this.usersService.findById(id);
   }
 
-  async register(email: string, pass: string): Promise<Tokens> {
+  async register(data: AuthDto): Promise<Tokens> {
     const saltOrRounds = 10;
-    const hashedPassword = await bcrypt.hash(pass, saltOrRounds);
+    const hashedPassword = await bcrypt.hash(data.password, saltOrRounds);
     const user = await this.usersService.create({
-      email,
+      email: data.email,
       password: hashedPassword,
     });
     const payload = { email: user.email, id: user.id };
